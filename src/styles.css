@@ -3,6 +3,19 @@ body {
   text-align: center;
 }
 
+body::after {
+  background: url(./assets/primavera2.jpeg);
+  background-size: cover ;
+  content: "";
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  opacity: 0.6;
+  z-index: -1;   
+}
+
 table {
   border: 1px solid;
   background-color: #F8B1FD;
