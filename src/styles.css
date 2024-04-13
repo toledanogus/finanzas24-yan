@@ -30,7 +30,7 @@ table {
   margin-left: auto;
   margin-right: auto;
   text-align: left;
-  border-spacing: 5px 8px;
+  /* border-spacing: 5px 8px; */
 }
 
 .simulador{
@@ -43,7 +43,7 @@ table {
   margin-left: auto;
   margin-right: auto;
   text-align: left;
-  border-spacing: 20px 5px;
+  /* border-spacing: 20px 5px; */
 }
 
 th,
@@ -56,8 +56,13 @@ th,
   border-radius: 5px;
   border-color: black;
 }
-td {
+
+.texto-cortado {
   text-transform: capitalize;
+  width: 130px; /* Ancho máximo del contenedor */
+  white-space: nowrap; /* Evita el salto de línea */
+  overflow: hidden; /* Oculta el texto que desborda el contenedor */
+  text-overflow: ellipsis;
 }
 
 .total {
@@ -140,5 +145,9 @@ select {
   background-color: #F265FC;
   padding: 10px;
   width: 30%;
+}
+
+.negritas{
+  font-weight: bolder;
 }
 

@@ -158,7 +158,7 @@ export const GeneralesPage = () => {
         <tbody>
           {Object.entries(conceptos).map(([index, concepto]) => (
             <tr key={index}>
-              <td>{concepto[0]}</td>
+              <td><div className="texto-cortado">{concepto[0]}</div></td>
               <td>
                 {concepto[1] && concepto[1]
                   ? `$${concepto[1].toLocaleString()}`
