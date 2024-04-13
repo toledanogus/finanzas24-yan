@@ -184,7 +184,8 @@ export const SimuladorPage = () => {
           <tr>
             <th>Concepto</th>
             <th>Cantidad</th>
-            <th>Pagado</th>
+            <th>Efectivo</th>
+            <th>Electrónico</th>
           </tr>
         </thead>
         <tbody>
@@ -195,6 +196,17 @@ export const SimuladorPage = () => {
                 {concepto[1] && concepto[1]
                   ? `$${concepto[1].toLocaleString()}`
                   : "—"}
+              </td>
+              <td>
+                { (
+                  <input
+                    name={concepto[0]}
+                    value={concepto[1]} // Cambiado a concepto[1]
+                    type="checkbox"
+                    onChange={handleCheckboxChange}
+                    checked={checkedItems.has(concepto[0])} // Nuevo
+                  />
+                ) }
               </td>
               <td>
                 { (
