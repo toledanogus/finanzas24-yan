@@ -1,5 +1,4 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react-hooks/exhaustive-deps */
+
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -15,8 +14,9 @@ import { useFetch } from "../hooks/useFetch";
 import { RegistrarGasto } from "./components/RegistrarGasto";
 import { useNavigate } from "react-router-dom";
 
-export const GeneralesPage = () => {
-  const { quincena, conceptos, pagados, redibujar, totalTemporal2, meses, quincenas } =
+
+export const SimuladorPage = () => {
+    const { quincena, conceptos, pagados, redibujar, totalTemporal2, meses, quincenas } =
     useSelector((state) => state.generales);
   const dispatch = useDispatch();
   const [checkedItems, setCheckedItems] = useState(new Set());
@@ -30,28 +30,47 @@ export const GeneralesPage = () => {
   const navigate = useNavigate();
   const [quincenaOk, setQuincenaOk] = useState("");
   const [render, setRender] = useState(0);
+  const [aSumar, setASumar] = useState([]);
+  const [resultado, setResultado] = useState(0);
 
   /* FUNCIONES**************************************************************** */
 
   const handleCheckboxChange = (event) => {
-    const { name, checked } = event.target;
+    const { name, checked, value } = event.target;
+  
     if (checked) {
-      setCheckedItems(
-        (prevCheckedItems) => new Set(prevCheckedItems.add(name))
-      );
+      setCheckedItems((prevCheckedItems) => new Set(prevCheckedItems.add(name)));
+      setASumar((prevASumar) => [...prevASumar, Number(value)]);
     } else {
-      const newCheckedItems = new Set(checkedItems);
-      newCheckedItems.delete(name);
-      setCheckedItems(newCheckedItems);
+      setCheckedItems((prevCheckedItems) => {
+        const newCheckedItems = new Set(prevCheckedItems);
+        newCheckedItems.delete(name);
+        return newCheckedItems;
+      });
+  
+      setASumar((prevASumar) => {
+        const index = prevASumar.findIndex((item) => item === Number(value));
+        if (index !== -1) {
+          const newArray = [...prevASumar];
+          newArray.splice(index, 1); // Elimina solo la primera instancia encontrada
+          return newArray;
+        }
+        return prevASumar;
+      });
     }
   };
-
-  /* const CambiarUrl = () => {
-    setUrl("./php/test2.php");
-  }; */
+  
+  
+  const sumarMarcados = () => {
+    const resultadoTemp = aSumar.reduce((acumulador, valor)=>{
+        return acumulador + valor;
+    }, 0);
+    setResultado(resultadoTemp);
+  }
+  
 
   const sumarTotal2 = () => {
-    // eslint-disable-next-line no-unused-vars
+    
     const suma = conceptos.reduce((total, [, cantidad, pagado]) => {
       if (pagado === 0) {
         return total + cantidad;
@@ -72,8 +91,8 @@ export const GeneralesPage = () => {
     navigate("/inicio");
   };
 
-  const aSimulador = () => {
-    navigate("/simulador");
+  const aGenerales = () => {
+    navigate("/generales");
   };
 
   const mesSiguiente = () => {
@@ -102,6 +121,12 @@ export const GeneralesPage = () => {
     });
   };
 
+  const resetear = () => {
+    setCheckedItems(new Set());
+    setResultado(0);
+    setASumar([]);
+  }
+
   /* EFECTOS *******************************************************/
   useEffect(() => {
     const qMes = localStorage.getItem("mesG");
@@ -121,11 +146,19 @@ export const GeneralesPage = () => {
   useEffect(() => {
     dispatch(getConceptos());
     setRender(render+1);
-  }, [checkedItems, redibujar]);
+  }, [redibujar]);
 
   useEffect(() => {
     setQuincenaOk(quincena);
   }, []);
+
+  useEffect(() => {
+    if (aSumar) {
+        sumarMarcados();
+    }
+   
+  }, [checkedItems]);
+  
 
   return (
     <>
@@ -141,7 +174,7 @@ export const GeneralesPage = () => {
           &gt;
         </button>
       </div>
-      <table>
+      <table className="simulador">
         <thead>
           <tr>
             <th colSpan="4" id="titulo" className="titulotabla">
@@ -152,7 +185,6 @@ export const GeneralesPage = () => {
             <th>Concepto</th>
             <th>Cantidad</th>
             <th>Pagado</th>
-            <th>Estatus</th>
           </tr>
         </thead>
         <tbody>
@@ -165,17 +197,15 @@ export const GeneralesPage = () => {
                   : "—"}
               </td>
               <td>
-                {concepto[2] === 0 ? (
+                { (
                   <input
-                    name={concepto[0]} // Cambiado a concepto[0]
+                    name={concepto[0]}
+                    value={concepto[1]} // Cambiado a concepto[1]
                     type="checkbox"
                     onChange={handleCheckboxChange}
                     checked={checkedItems.has(concepto[0])} // Nuevo
                   />
-                ) : null}
-              </td>
-              <td>
-                {concepto[2] ? <span className="arrow">✓</span> : "No pagado"}
+                ) }
               </td>
             </tr>
           ))}
@@ -189,29 +219,22 @@ export const GeneralesPage = () => {
           </tr>
           <tr>
             <td>
-              <button
-              className="registroPagos"
-                onClick={() => {
-                  enviarPagados().then(() => dispatch(getConceptos()));
-                }}
-              >
-                Registrar Pagos
-              </button>
+              
             </td>
           </tr>
         </tfoot>
       </table>
-
-      <RegistrarGasto />
-      {/*  <div>{redibujar}</div>
-      <button onClick={aBanamex}>A Banamex</button> */}
-
-      <button className="navegacion" onClick={aInicio}>
-        Selección de mes
+      <button className="navegacion" onClick={aGenerales}>
+        Gastos
       </button>
-      <button className="navegacion" onClick={aSimulador}>
-        Simulador
-      </button>
+      
+      <table>
+        <tr>
+            <td>Total:</td>
+            <td>{`$${resultado.toLocaleString()}`}</td>
+        </tr>
+      </table>
+      <button className="resetear" onClick={resetear}>Resetear</button>
     </>
   );
-};
+}

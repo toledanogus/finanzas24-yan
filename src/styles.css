@@ -16,6 +16,10 @@ body::after {
   z-index: -1;   
 }
 
+.tituloPrincipal{
+  color: #823788;
+}
+
 table {
   border: 1px solid;
   background-color: #F8B1FD;
@@ -26,6 +30,20 @@ table {
   margin-left: auto;
   margin-right: auto;
   text-align: left;
+  border-spacing: 5px 8px;
+}
+
+.simulador{
+  border: 1px solid;
+  background-color: #F8B1FD;
+  box-shadow: 4px 4px 10px rgb(109, 106, 106);
+  border-radius: 5px;
+  padding: 5px;
+  margin: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+  border-spacing: 20px 5px;
 }
 
 th,
@@ -69,6 +87,11 @@ button {
   border-radius: 4px;
   padding: 4px;
   font-weight: bold;
+  padding: 10px;
+}
+
+.registroPagos{
+  padding: 4px;
 }
 
 h3 {
@@ -104,5 +127,18 @@ select {
 .aa {
   padding-left: 20px;
   padding-right: 20px;
+}
+
+.sumar{
+  background-color: #7A577D;
+  padding: 10px;
+  width: 30%;
+  margin: 10px
+}
+
+.resetear{
+  background-color: #F265FC;
+  padding: 10px;
+  width: 30%;
 }
 
