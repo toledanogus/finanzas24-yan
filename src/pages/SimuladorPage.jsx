@@ -255,9 +255,6 @@ export const SimuladorPage = () => {
         </tbody>
         
       </table>
-      <button className="navegacion" onClick={aGenerales}>
-        Gastos
-      </button>
       
       <table>
         <tr>
@@ -270,6 +267,11 @@ export const SimuladorPage = () => {
         </tr>
       </table>
       <button className="resetear" onClick={resetear}>Resetear</button>
+      <div>
+      <button className="navegacion" onClick={aGenerales}>
+        Gastos
+      </button>
+      </div>
     </>
   );
 }
